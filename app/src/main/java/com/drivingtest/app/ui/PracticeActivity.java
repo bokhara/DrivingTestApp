@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 
 import com.drivingtest.app.R;
 import com.drivingtest.app.data.AppDatabase;
@@ -38,11 +36,10 @@ public class PracticeActivity extends AppCompatActivity {
     private RadioButton rbOptionA, rbOptionB, rbOptionC, rbOptionD;
     private Button btnSubmit;
     private Button btnNext;
-    private CardView cardExplanation;
+    private View cardExplanation;
     private TextView tvExplanation;
     private ImageButton btnFavorite;
     private ImageButton btnAnswerCard;
-    private LinearLayout layoutOptions;
     
     private List<Question> questions;
     private int currentIndex = 0;
@@ -63,6 +60,7 @@ public class PracticeActivity extends AppCompatActivity {
         
         // Get practice mode from intent
         practiceMode = getIntent().getStringExtra("mode");
+        if (practiceMode == null) practiceMode = "sequential";
         String category = getIntent().getStringExtra("category");
         
         // Initialize views
@@ -71,19 +69,13 @@ public class PracticeActivity extends AppCompatActivity {
         // Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getModeTitle());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(getModeTitle());
+        }
         
         // Load questions
         loadQuestions(category);
-        
-        // Show first question
-        if (!questions.isEmpty()) {
-            showQuestion(0);
-        } else {
-            Toast.makeText(this, "暂无题目", Toast.LENGTH_SHORT).show();
-            finish();
-        }
     }
     
     private void initViews() {
@@ -104,7 +96,21 @@ public class PracticeActivity extends AppCompatActivity {
         tvExplanation = findViewById(R.id.tvExplanation);
         btnFavorite = findViewById(R.id.btnFavorite);
         btnAnswerCard = findViewById(R.id.btnAnswerCard);
-        layoutOptions = findViewById(R.id.layoutOptions);
+        
+        // 手动处理 RadioButton 选中逻辑
+        View.OnClickListener optionListener = v -> {
+            if (isAnswered) return;
+            int id = v.getId();
+            rbOptionA.setChecked(id == R.id.rbOptionA);
+            rbOptionB.setChecked(id == R.id.rbOptionB);
+            rbOptionC.setChecked(id == R.id.rbOptionC);
+            rbOptionD.setChecked(id == R.id.rbOptionD);
+        };
+        
+        rbOptionA.setOnClickListener(optionListener);
+        rbOptionB.setOnClickListener(optionListener);
+        rbOptionC.setOnClickListener(optionListener);
+        rbOptionD.setOnClickListener(optionListener);
         
         btnSubmit.setOnClickListener(v -> checkAnswer());
         btnNext.setOnClickListener(v -> nextQuestion());
@@ -113,6 +119,7 @@ public class PracticeActivity extends AppCompatActivity {
     }
     
     private String getModeTitle() {
+        if (practiceMode == null) return "练习";
         switch (practiceMode) {
             case "sequential": return "顺序练习";
             case "random": return "随机练习";
@@ -155,6 +162,9 @@ public class PracticeActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 if (!questions.isEmpty()) {
                     showQuestion(0);
+                } else {
+                    Toast.makeText(this, "暂无题目", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             });
         }).start();
@@ -189,6 +199,13 @@ public class PracticeActivity extends AppCompatActivity {
         rbOptionA.setText("A. " + question.getOptionA());
         rbOptionB.setText("B. " + question.getOptionB());
         
+        // Reset option colors
+        int textColor = getResources().getColor(R.color.text_primary);
+        rbOptionA.setTextColor(textColor);
+        rbOptionB.setTextColor(textColor);
+        rbOptionC.setTextColor(textColor);
+        rbOptionD.setTextColor(textColor);
+        
         if (question.getOptionC() != null && !question.getOptionC().isEmpty()) {
             rbOptionC.setVisibility(View.VISIBLE);
             rbOptionC.setText("C. " + question.getOptionC());
@@ -203,9 +220,17 @@ public class PracticeActivity extends AppCompatActivity {
             rbOptionD.setVisibility(View.GONE);
         }
         
-        // Reset radio group
-        radioGroupOptions.clearCheck();
-        radioGroupOptions.setEnabled(true);
+        // 重置选中状态
+        rbOptionA.setChecked(false);
+        rbOptionB.setChecked(false);
+        rbOptionC.setChecked(false);
+        rbOptionD.setChecked(false);
+        
+        // Enable options
+        rbOptionA.setEnabled(true);
+        rbOptionB.setEnabled(true);
+        rbOptionC.setEnabled(true);
+        rbOptionD.setEnabled(true);
         
         // Hide explanation
         cardExplanation.setVisibility(View.GONE);
@@ -227,7 +252,13 @@ public class PracticeActivity extends AppCompatActivity {
     private void checkAnswer() {
         if (isAnswered) return;
         
-        int selectedId = radioGroupOptions.getCheckedRadioButtonId();
+        // 手动获取选中的 ID
+        int selectedId = -1;
+        if (rbOptionA.isChecked()) selectedId = R.id.rbOptionA;
+        else if (rbOptionB.isChecked()) selectedId = R.id.rbOptionB;
+        else if (rbOptionC.isChecked()) selectedId = R.id.rbOptionC;
+        else if (rbOptionD.isChecked()) selectedId = R.id.rbOptionD;
+        
         if (selectedId == -1) {
             Toast.makeText(this, "请选择答案", Toast.LENGTH_SHORT).show();
             return;
@@ -246,11 +277,14 @@ public class PracticeActivity extends AppCompatActivity {
         studyStatsManager.recordAnswer(isCorrect);
         
         // Show correct/wrong indication
+        int green = getResources().getColor(android.R.color.holo_green_dark);
+        int red = getResources().getColor(android.R.color.holo_red_dark);
+        
         RadioButton selectedRadio = findViewById(selectedId);
         if (isCorrect) {
-            selectedRadio.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+            selectedRadio.setTextColor(green);
         } else {
-            selectedRadio.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+            selectedRadio.setTextColor(red);
             // Highlight correct answer
             RadioButton correctRadio = null;
             switch (question.getCorrectAnswer()) {
@@ -260,7 +294,7 @@ public class PracticeActivity extends AppCompatActivity {
                 case "D": correctRadio = rbOptionD; break;
             }
             if (correctRadio != null) {
-                correctRadio.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+                correctRadio.setTextColor(green);
             }
             
             // Mark as wrong in database
@@ -269,8 +303,11 @@ public class PracticeActivity extends AppCompatActivity {
             }).start();
         }
         
-        // Disable radio group
-        radioGroupOptions.setEnabled(false);
+        // Disable options
+        rbOptionA.setEnabled(false);
+        rbOptionB.setEnabled(false);
+        rbOptionC.setEnabled(false);
+        rbOptionD.setEnabled(false);
         
         // Show explanation
         tvExplanation.setText("答案解析：\n" + question.getExplanation());

@@ -42,6 +42,9 @@ public interface QuestionDao {
     
     @Query("SELECT COUNT(*) FROM questions WHERE isFavorite = 1")
     int getFavoriteQuestionCount();
+
+    @Query("SELECT COUNT(*) FROM questions WHERE practiceCount > 0")
+    int getPracticedQuestionCount();
     
     @Query("SELECT DISTINCT category FROM questions")
     List<String> getAllCategories();

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -58,17 +57,14 @@ public class MainActivity extends AppCompatActivity {
         // Set click listeners
         setupClickListeners();
         
-        // Load initial questions if needed
-        dataManager.loadInitialQuestions();
-        
-        // Update statistics
-        updateStatistics();
+        // Load data and update UI in background
+        refreshData();
     }
     
     @Override
     protected void onResume() {
         super.onResume();
-        updateStatistics();
+        refreshData();
     }
     
     private void initViews() {
@@ -96,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
         cardExam.setOnClickListener(v -> startExam());
         cardCategory.setOnClickListener(v -> showCategories());
         btnQuickStart.setOnClickListener(v -> {
-            if (tvWrongQuestions.getText() != null && !"0".contentEquals(tvWrongQuestions.getText())) {
+            String wrongCountStr = tvWrongQuestions.getText().toString();
+            if (!"0".equals(wrongCountStr) && !"".equals(wrongCountStr)) {
                 startPractice("wrong", null);
             } else {
                 startPractice("random", null);
@@ -122,21 +119,32 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, CategoryActivity.class));
     }
     
-    private void updateStatistics() {
+    private void refreshData() {
         new Thread(() -> {
+            // 1. Ensure initial questions are loaded (performs DB checks and inserts)
+            dataManager.loadInitialQuestions();
+            
+            // 2. Fetch statistics from DB
             int total = database.questionDao().getQuestionCount();
             int wrong = database.questionDao().getWrongQuestionCount();
             int favorite = database.questionDao().getFavoriteQuestionCount();
-            int practiced = total - wrong;
+            int practiced = database.questionDao().getPracticedQuestionCount();
+            
+            int streak = studyStatsManager.getStreak();
+            int lastScore = studyStatsManager.getLastExamScore();
+            int accuracy = studyStatsManager.getAccuracy();
+            int totalAnswered = studyStatsManager.getTotalAnswered();
+            
             int progress = total == 0 ? 0 : Math.min(100, (practiced * 100 / total));
             
+            // 3. Update UI on main thread
             runOnUiThread(() -> {
                 tvTotalQuestions.setText(String.valueOf(total));
                 tvWrongQuestions.setText(String.valueOf(wrong));
                 tvFavoriteQuestions.setText(String.valueOf(favorite));
-                tvStudyStreak.setText("连续 " + studyStatsManager.getStreak() + " 天");
-                tvProgressLabel.setText("已练习 " + practiced + " / " + total + " · 最近模考 " + studyStatsManager.getLastExamScore() + " 分");
-                tvAccuracy.setText("正确率 " + studyStatsManager.getAccuracy() + "% · 累计答题 " + studyStatsManager.getTotalAnswered());
+                tvStudyStreak.setText("连续 " + streak + " 天");
+                tvProgressLabel.setText("已练习 " + practiced + " / " + total + " · 最近模考 " + lastScore + " 分");
+                tvAccuracy.setText("正确率 " + accuracy + "% · 累计答题 " + totalAnswered);
                 progressStudy.setProgress(progress);
             });
         }).start();
