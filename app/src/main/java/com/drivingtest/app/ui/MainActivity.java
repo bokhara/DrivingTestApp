@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupClickListeners() {
         cardSequential.setOnClickListener(v -> startPractice("sequential", null));
         cardRandom.setOnClickListener(v -> startPractice("random", null));
-        cardWrong.setOnClickListener(v -> startPractice("wrong", null));
-        cardFavorite.setOnClickListener(v -> startPractice("favorite", null));
+        cardWrong.setOnClickListener(v -> startActivity(new Intent(this, WrongQuestionsActivity.class)));
+        cardFavorite.setOnClickListener(v -> startActivity(new Intent(this, FavoriteQuestionsActivity.class)));
         cardExam.setOnClickListener(v -> startExam());
         cardCategory.setOnClickListener(v -> showCategories());
         btnQuickStart.setOnClickListener(v -> {
