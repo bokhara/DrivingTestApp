@@ -15,6 +15,7 @@ public class Question {
     private String optionD;            // 选项D
     private String correctAnswer;      // 正确答案 (A/B/C/D)
     private String explanation;        // 答案解析
+    private String imageUrl;           // 图片题 URL（第三方网站图片）
     private String category;           // 分类 (交通法规/交通信号/安全驾驶等)
     private String type;               // 题型 (单选题/多选题/判断题)
     private int difficulty;            // 难度 (1-3)
@@ -48,6 +49,9 @@ public class Question {
     
     public String getExplanation() { return explanation; }
     public void setExplanation(String explanation) { this.explanation = explanation; }
+    
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }

@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +29,7 @@ public class PracticeActivity extends AppCompatActivity {
     
     private TextView tvQuestionNumber;
     private TextView tvQuestion;
+    private ImageView ivQuestionImage;
     private RadioGroup radioGroupOptions;
     private RadioButton rbOptionA, rbOptionB, rbOptionC, rbOptionD;
     private Button btnSubmit;
@@ -77,6 +81,7 @@ public class PracticeActivity extends AppCompatActivity {
     private void initViews() {
         tvQuestionNumber = findViewById(R.id.tvQuestionNumber);
         tvQuestion = findViewById(R.id.tvQuestion);
+        ivQuestionImage = findViewById(R.id.ivQuestionImage);
         radioGroupOptions = findViewById(R.id.radioGroupOptions);
         rbOptionA = findViewById(R.id.rbOptionA);
         rbOptionB = findViewById(R.id.rbOptionB);
@@ -154,6 +159,14 @@ public class PracticeActivity extends AppCompatActivity {
         
         // Update question text
         tvQuestion.setText(question.getQuestion());
+        
+        // Load third-party image when available
+        if (question.getImageUrl() != null && !question.getImageUrl().isEmpty()) {
+            ivQuestionImage.setVisibility(View.VISIBLE);
+            Glide.with(this).load(question.getImageUrl()).into(ivQuestionImage);
+        } else {
+            ivQuestionImage.setVisibility(View.GONE);
+        }
         
         // Update options
         rbOptionA.setText("A. " + question.getOptionA());

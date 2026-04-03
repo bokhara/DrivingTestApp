@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.drivingtest.app.model.Question;
 
-@Database(entities = {Question.class}, version = 1, exportSchema = false)
+@Database(entities = {Question.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     
     private static final String DATABASE_NAME = "driving_test_db";

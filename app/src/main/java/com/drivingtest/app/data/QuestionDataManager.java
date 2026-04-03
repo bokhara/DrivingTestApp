@@ -78,6 +78,7 @@ public class QuestionDataManager {
             question.setOptionD(obj.optString("optionD", ""));
             question.setCorrectAnswer(obj.getString("correctAnswer"));
             question.setExplanation(obj.optString("explanation", ""));
+            question.setImageUrl(obj.optString("imageUrl", ""));
             question.setCategory(obj.getString("category"));
             question.setType(obj.optString("type", "单选题"));
             question.setDifficulty(obj.optInt("difficulty", 1));
