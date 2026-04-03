@@ -36,6 +36,10 @@
         <activity
             android:name=".ui.ResultActivity"
             android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.CategoryActivity"
+            android:parentActivityName=".ui.MainActivity" />
         
     </application>
 

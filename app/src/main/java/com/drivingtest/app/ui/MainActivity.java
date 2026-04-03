@@ -107,15 +107,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void showCategories() {
-        // Show category selection dialog
-        new Thread(() -> {
-            // Load categories from database
-            // Show dialog on UI thread
-            runOnUiThread(() -> {
-                // For now, just start practice with a default category
-                startPractice("category", "交通法规");
-            });
-        }).start();
+        startActivity(new Intent(this, CategoryActivity.class));
     }
     
     private void updateStatistics() {
