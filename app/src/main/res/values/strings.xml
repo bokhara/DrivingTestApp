@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">驾考宝典</string>
+    
+    <!-- Main Menu -->
+    <string name="menu_sequential">顺序练习</string>
+    <string name="menu_random">随机练习</string>
+    <string name="menu_wrong">错题练习</string>
+    <string name="menu_favorite">我的收藏</string>
+    <string name="menu_exam">模拟考试</string>
+    <string name="menu_category">分类练习</string>
+    
+    <!-- Practice -->
+    <string name="submit_answer">提交答案</string>
+    <string name="next_question">下一题</string>
+    <string name="prev_question">上一题</string>
+    <string name="question_number">%1$d / %2$d</string>
+    <string name="explanation">答案解析</string>
+    <string name="correct">回答正确！</string>
+    <string name="wrong">回答错误！</string>
+    <string name="add_favorite">已收藏</string>
+    <string name="remove_favorite">取消收藏</string>
+    
+    <!-- Exam -->
+    <string name="exam_title">模拟考试</string>
+    <string name="exam_time_remaining">剩余时间：%1$02d:%2$02d</string>
+    <string name="exam_submit">交卷</string>
+    
+    <!-- Result -->
+    <string name="result_title">考试结果</string>
+    <string name="result_score">%1$d分</string>
+    <string name="result_pass">恭喜通过！</string>
+    <string name="result_fail">未通过，继续加油！</string>
+    <string name="result_correct">答对：%1$d题</string>
+    <string name="result_wrong">答错：%1$d题</string>
+    <string name="review_wrong">复习错题</string>
+    <string name="back_home">返回首页</string>
+    
+    <!-- Categories -->
+    <string name="category_traffic_law">交通法规</string>
+    <string name="category_traffic_sign">交通信号</string>
+    <string name="category_safe_driving">安全驾驶</string>
+    <string name="category_driving_etiquette">驾驶礼仪</string>
+    <string name="category_emergency">紧急情况</string>
+    <string name="category_vehicle_maintenance">车辆维护</string>
+    
+    <!-- Statistics -->
+    <string name="total_questions">总题库</string>
+    <string name="wrong_questions">错题数</string>
+    <string name="favorite_questions">收藏数</string>
+    
+    <!-- Messages -->
+    <string name="no_questions">暂无题目</string>
+    <string name="no_wrong_questions">暂无错题，继续保持！</string>
+    <string name="no_favorite_questions">暂无收藏题目</string>
+    <string name="select_answer">请选择答案</string>
+    <string name="loading">加载中...</string>
+    <string name="update_available">题库有更新</string>
+    <string name="update_now">立即更新</string>
+    <string name="update_later">稍后更新</string>
+</resources>
