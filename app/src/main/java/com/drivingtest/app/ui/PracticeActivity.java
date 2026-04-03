@@ -29,6 +29,9 @@ public class PracticeActivity extends AppCompatActivity {
     
     private TextView tvQuestionNumber;
     private TextView tvQuestion;
+    private TextView tvTagType;
+    private TextView tvTagCategory;
+    private TextView tvTagImage;
     private ImageView ivQuestionImage;
     private RadioGroup radioGroupOptions;
     private RadioButton rbOptionA, rbOptionB, rbOptionC, rbOptionD;
@@ -81,6 +84,9 @@ public class PracticeActivity extends AppCompatActivity {
     private void initViews() {
         tvQuestionNumber = findViewById(R.id.tvQuestionNumber);
         tvQuestion = findViewById(R.id.tvQuestion);
+        tvTagType = findViewById(R.id.tvTagType);
+        tvTagCategory = findViewById(R.id.tvTagCategory);
+        tvTagImage = findViewById(R.id.tvTagImage);
         ivQuestionImage = findViewById(R.id.ivQuestionImage);
         radioGroupOptions = findViewById(R.id.radioGroupOptions);
         rbOptionA = findViewById(R.id.rbOptionA);
@@ -159,13 +165,17 @@ public class PracticeActivity extends AppCompatActivity {
         
         // Update question text
         tvQuestion.setText(question.getQuestion());
+        tvTagType.setText(question.getType());
+        tvTagCategory.setText(question.getCategory());
         
         // Load third-party image when available
         if (question.getImageUrl() != null && !question.getImageUrl().isEmpty()) {
             ivQuestionImage.setVisibility(View.VISIBLE);
+            tvTagImage.setVisibility(View.VISIBLE);
             Glide.with(this).load(question.getImageUrl()).into(ivQuestionImage);
         } else {
             ivQuestionImage.setVisibility(View.GONE);
+            tvTagImage.setVisibility(View.GONE);
         }
         
         // Update options

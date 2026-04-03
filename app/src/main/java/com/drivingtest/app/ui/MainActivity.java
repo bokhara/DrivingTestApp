@@ -2,6 +2,7 @@ package com.drivingtest.app.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvTotalQuestions;
     private TextView tvWrongQuestions;
     private TextView tvFavoriteQuestions;
+    private TextView tvStudyStreak;
+    private TextView tvProgressLabel;
+    private ProgressBar progressStudy;
     private MaterialCardView cardSequential;
     private MaterialCardView cardRandom;
     private MaterialCardView cardWrong;
@@ -67,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         tvTotalQuestions = findViewById(R.id.tvTotalQuestions);
         tvWrongQuestions = findViewById(R.id.tvWrongQuestions);
         tvFavoriteQuestions = findViewById(R.id.tvFavoriteQuestions);
+        tvStudyStreak = findViewById(R.id.tvStudyStreak);
+        tvProgressLabel = findViewById(R.id.tvProgressLabel);
+        progressStudy = findViewById(R.id.progressStudy);
         cardSequential = findViewById(R.id.cardSequential);
         cardRandom = findViewById(R.id.cardRandom);
         cardWrong = findViewById(R.id.cardWrong);
@@ -115,11 +122,16 @@ public class MainActivity extends AppCompatActivity {
             int total = database.questionDao().getQuestionCount();
             int wrong = database.questionDao().getWrongQuestionCount();
             int favorite = database.questionDao().getFavoriteQuestionCount();
+            int practiced = total - wrong;
+            int progress = total == 0 ? 0 : Math.min(100, (practiced * 100 / total));
             
             runOnUiThread(() -> {
                 tvTotalQuestions.setText(String.valueOf(total));
                 tvWrongQuestions.setText(String.valueOf(wrong));
                 tvFavoriteQuestions.setText(String.valueOf(favorite));
+                tvStudyStreak.setText("连续 7 天");
+                tvProgressLabel.setText("已练习 " + practiced + " / " + total);
+                progressStudy.setProgress(progress);
             });
         }).start();
     }

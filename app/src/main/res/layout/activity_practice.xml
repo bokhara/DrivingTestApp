@@ -49,6 +49,59 @@
             app:tint="@color/warning" />
     </LinearLayout>
 
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvTagType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="单选题"
+                android:textColor="@android:color/white"
+                android:background="@drawable/tag_primary_bg" />
+
+            <TextView
+                android:id="@+id/tvTagCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="交通法规"
+                android:textColor="@color/primary"
+                android:background="@drawable/tag_light_bg" />
+
+            <TextView
+                android:id="@+id/tvTagImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="图片题"
+                android:textColor="@color/warning"
+                android:background="@drawable/tag_warning_bg"
+                android:visibility="gone" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
     <!-- Question Card -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
