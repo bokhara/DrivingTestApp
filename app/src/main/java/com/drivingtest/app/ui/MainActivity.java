@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private MaterialCardView cardFavorite;
     private MaterialCardView cardExam;
     private MaterialCardView cardCategory;
+    private MaterialButton btnQuickStart;
     
     private AppDatabase database;
     private QuestionDataManager dataManager;
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         cardFavorite = findViewById(R.id.cardFavorite);
         cardExam = findViewById(R.id.cardExam);
         cardCategory = findViewById(R.id.cardCategory);
+        btnQuickStart = findViewById(R.id.btnQuickStart);
     }
     
     private void setupClickListeners() {
@@ -79,6 +83,13 @@ public class MainActivity extends AppCompatActivity {
         cardFavorite.setOnClickListener(v -> startPractice("favorite", null));
         cardExam.setOnClickListener(v -> startExam());
         cardCategory.setOnClickListener(v -> showCategories());
+        btnQuickStart.setOnClickListener(v -> {
+            if (tvWrongQuestions.getText() != null && !"0".contentEquals(tvWrongQuestions.getText())) {
+                startPractice("wrong", null);
+            } else {
+                startPractice("random", null);
+            }
+        });
     }
     
     private void startPractice(String mode, String category) {
