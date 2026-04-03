@@ -12,6 +12,8 @@ public class StudyStatsManager {
     private static final String KEY_LAST_STUDY_DATE = "last_study_date";
     private static final String KEY_STREAK = "streak";
     private static final String KEY_LAST_EXAM_SCORE = "last_exam_score";
+    private static final String KEY_TOTAL_ANSWERED = "total_answered";
+    private static final String KEY_TOTAL_CORRECT = "total_correct";
 
     private final SharedPreferences prefs;
 
@@ -27,6 +29,23 @@ public class StudyStatsManager {
             streak += 1;
             prefs.edit().putString(KEY_LAST_STUDY_DATE, today).putInt(KEY_STREAK, streak).apply();
         }
+    }
+
+    public void recordAnswer(boolean correct) {
+        int totalAnswered = prefs.getInt(KEY_TOTAL_ANSWERED, 0) + 1;
+        int totalCorrect = prefs.getInt(KEY_TOTAL_CORRECT, 0) + (correct ? 1 : 0);
+        prefs.edit().putInt(KEY_TOTAL_ANSWERED, totalAnswered).putInt(KEY_TOTAL_CORRECT, totalCorrect).apply();
+    }
+
+    public int getAccuracy() {
+        int totalAnswered = prefs.getInt(KEY_TOTAL_ANSWERED, 0);
+        int totalCorrect = prefs.getInt(KEY_TOTAL_CORRECT, 0);
+        if (totalAnswered == 0) return 0;
+        return (totalCorrect * 100) / totalAnswered;
+    }
+
+    public int getTotalAnswered() {
+        return prefs.getInt(KEY_TOTAL_ANSWERED, 0);
     }
 
     public int getStreak() {

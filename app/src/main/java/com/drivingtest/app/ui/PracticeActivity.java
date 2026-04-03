@@ -109,7 +109,7 @@ public class PracticeActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(v -> checkAnswer());
         btnNext.setOnClickListener(v -> nextQuestion());
         btnFavorite.setOnClickListener(v -> toggleFavorite());
-        btnAnswerCard.setOnClickListener(v -> Toast.makeText(this, "答题卡：第 " + (currentIndex + 1) + " / " + questions.size() + " 题", Toast.LENGTH_SHORT).show());
+        btnAnswerCard.setOnClickListener(v -> showAnswerCard());
     }
     
     private String getModeTitle() {
@@ -243,6 +243,7 @@ public class PracticeActivity extends AppCompatActivity {
         else if (selectedId == R.id.rbOptionD) selectedAnswer = "D";
         
         boolean isCorrect = selectedAnswer.equals(question.getCorrectAnswer());
+        studyStatsManager.recordAnswer(isCorrect);
         
         // Show correct/wrong indication
         RadioButton selectedRadio = findViewById(selectedId);
@@ -311,6 +312,18 @@ public class PracticeActivity extends AppCompatActivity {
             R.drawable.ic_favorite_filled : R.drawable.ic_favorite_border);
     }
     
+    private void showAnswerCard() {
+        StringBuilder builder = new StringBuilder();
+        int max = Math.min(questions.size(), 50);
+        for (int i = 0; i < max; i++) {
+            if (i == currentIndex) builder.append("[");
+            builder.append(i + 1);
+            if (i == currentIndex) builder.append("]");
+            builder.append(i == max - 1 ? "" : "  ");
+        }
+        Toast.makeText(this, "答题卡\n" + builder, Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();

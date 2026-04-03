@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvFavoriteQuestions;
     private TextView tvStudyStreak;
     private TextView tvProgressLabel;
+    private TextView tvAccuracy;
     private ProgressBar progressStudy;
     private MaterialCardView cardSequential;
     private MaterialCardView cardRandom;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         tvFavoriteQuestions = findViewById(R.id.tvFavoriteQuestions);
         tvStudyStreak = findViewById(R.id.tvStudyStreak);
         tvProgressLabel = findViewById(R.id.tvProgressLabel);
+        tvAccuracy = findViewById(R.id.tvAccuracy);
         progressStudy = findViewById(R.id.progressStudy);
         cardSequential = findViewById(R.id.cardSequential);
         cardRandom = findViewById(R.id.cardRandom);
@@ -134,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 tvFavoriteQuestions.setText(String.valueOf(favorite));
                 tvStudyStreak.setText("连续 " + studyStatsManager.getStreak() + " 天");
                 tvProgressLabel.setText("已练习 " + practiced + " / " + total + " · 最近模考 " + studyStatsManager.getLastExamScore() + " 分");
+                tvAccuracy.setText("正确率 " + studyStatsManager.getAccuracy() + "% · 累计答题 " + studyStatsManager.getTotalAnswered());
                 progressStudy.setProgress(progress);
             });
         }).start();
