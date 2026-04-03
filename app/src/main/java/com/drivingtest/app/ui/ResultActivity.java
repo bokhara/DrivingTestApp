@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.drivingtest.app.R;
+import com.drivingtest.app.data.StudyStatsManager;
 
 public class ResultActivity extends AppCompatActivity {
     
@@ -38,6 +39,7 @@ public class ResultActivity extends AppCompatActivity {
         
         int score = getIntent().getIntExtra("score", 0);
         int total = getIntent().getIntExtra("total", 100);
+        new StudyStatsManager(this).setLastExamScore((score * 100) / total);
         
         displayResult(score, total);
         

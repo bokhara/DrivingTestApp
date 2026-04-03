@@ -19,6 +19,7 @@ import androidx.cardview.widget.CardView;
 
 import com.drivingtest.app.R;
 import com.drivingtest.app.data.AppDatabase;
+import com.drivingtest.app.data.StudyStatsManager;
 import com.drivingtest.app.model.Question;
 
 import java.util.ArrayList;
@@ -40,12 +41,14 @@ public class PracticeActivity extends AppCompatActivity {
     private CardView cardExplanation;
     private TextView tvExplanation;
     private ImageButton btnFavorite;
+    private ImageButton btnAnswerCard;
     private LinearLayout layoutOptions;
     
     private List<Question> questions;
     private int currentIndex = 0;
     private boolean isAnswered = false;
     private AppDatabase database;
+    private StudyStatsManager studyStatsManager;
     private String practiceMode;
     
     @Override
@@ -55,6 +58,8 @@ public class PracticeActivity extends AppCompatActivity {
         
         // Initialize database
         database = AppDatabase.getInstance(this);
+        studyStatsManager = new StudyStatsManager(this);
+        studyStatsManager.markStudiedToday();
         
         // Get practice mode from intent
         practiceMode = getIntent().getStringExtra("mode");
@@ -98,11 +103,13 @@ public class PracticeActivity extends AppCompatActivity {
         cardExplanation = findViewById(R.id.cardExplanation);
         tvExplanation = findViewById(R.id.tvExplanation);
         btnFavorite = findViewById(R.id.btnFavorite);
+        btnAnswerCard = findViewById(R.id.btnAnswerCard);
         layoutOptions = findViewById(R.id.layoutOptions);
         
         btnSubmit.setOnClickListener(v -> checkAnswer());
         btnNext.setOnClickListener(v -> nextQuestion());
         btnFavorite.setOnClickListener(v -> toggleFavorite());
+        btnAnswerCard.setOnClickListener(v -> Toast.makeText(this, "答题卡：第 " + (currentIndex + 1) + " / " + questions.size() + " 题", Toast.LENGTH_SHORT).show());
     }
     
     private String getModeTitle() {

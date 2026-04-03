@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.drivingtest.app.R;
 import com.drivingtest.app.data.AppDatabase;
 import com.drivingtest.app.data.QuestionDataManager;
+import com.drivingtest.app.data.StudyStatsManager;
 import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     
     private AppDatabase database;
     private QuestionDataManager dataManager;
+    private StudyStatsManager studyStatsManager;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize database and data manager
         database = AppDatabase.getInstance(this);
         dataManager = new QuestionDataManager(this);
+        studyStatsManager = new StudyStatsManager(this);
         
         // Initialize views
         initViews();
@@ -129,8 +132,8 @@ public class MainActivity extends AppCompatActivity {
                 tvTotalQuestions.setText(String.valueOf(total));
                 tvWrongQuestions.setText(String.valueOf(wrong));
                 tvFavoriteQuestions.setText(String.valueOf(favorite));
-                tvStudyStreak.setText("连续 7 天");
-                tvProgressLabel.setText("已练习 " + practiced + " / " + total);
+                tvStudyStreak.setText("连续 " + studyStatsManager.getStreak() + " 天");
+                tvProgressLabel.setText("已练习 " + practiced + " / " + total + " · 最近模考 " + studyStatsManager.getLastExamScore() + " 分");
                 progressStudy.setProgress(progress);
             });
         }).start();
